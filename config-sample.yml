@@ -5,8 +5,7 @@ container_product_id: 1
 email_invoice: true
 email_order: true
 order_invoice: true
-auth:
-  api_key: mpto32mPUQoRC9EE19Vq1MF3t7K2jofd
-  api_secret: dxS1eqY7okcbPIjSggXnu8Ygd0Wysv9f
-  shared_secret: okcbPIjSggX
-  legacy_login: false
+api_key: mpto32mPUQoRC9EE19Vq1MF3t7K2jofd
+api_secret: dxS1eqY7okcbPIjSggXnu8Ygd0Wysv9f
+shared_secret: okcbPIjSggX
+legacy_login: false

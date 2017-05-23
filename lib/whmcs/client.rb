@@ -13,10 +13,10 @@ module Whmcs
                   :shared_secret
 
     def initialize
-      self.api_secret = Whmcs.config[:auth]['legacy_login'] ? Digest::MD5.hexdigest(Whmcs.config[:auth]['api_secret']) : Whmcs.config[:auth]['api_secret']
+      self.api_secret = Whmcs.config[:legacy_login] ? Digest::MD5.hexdigest(Whmcs.config[:api_secret]) : Whmcs.config[:api_secret]
       self.endpoint = Whmcs.config[:endpoint]
-      self.api_key = Whmcs.config[:auth]['api_key']
-      self.shared_secret = Whmcs.config[:auth]['shared_secret']
+      self.api_key = Whmcs.config[:api_key]
+      self.shared_secret = Whmcs.config[:shared_secret]
     end
 
     def exec!(action, data = {})

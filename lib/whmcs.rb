@@ -20,17 +20,16 @@ module Whmcs
   #
   @config = {
               endpoint: nil,
+              api_key: nil,
+              api_secret: nil,
+              shared_secret: nil,
+              legacy_login: false,
               enable_sso: true,
               default_payment_method: 'stripe',
               container_product_id: 1,
               email_invoice: true,
               email_order: true,
-              order_invoice: true,
-              auth: {
-                api_key: nil,
-                api_secret: nil,
-                shared_secret: nil
-              }
+              order_invoice: true              
             }
 
   @valid_config_keys = @config.keys
