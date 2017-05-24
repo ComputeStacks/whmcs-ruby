@@ -46,7 +46,7 @@ module Whmcs
       data['noinvoiceemail'] = true unless Whmcs.config[:email_invoice]
       data.merge!(order_data)
       response = @client.exec!('AddOrder', data)
-      (self.errors =|| []) << response # TEMP.
+      (self.errors ||= []) << response # TEMP.
       if response['result'] == 'success'
         self.invoice = Whmcs::Invoice.new(response) if response['invoiceid']
         if self.invoice
@@ -55,7 +55,7 @@ module Whmcs
         end
         true
       else
-        (self.errors =|| []) << response['message']
+        (self.errors ||= []) << response['message']
         false
       end
     end
