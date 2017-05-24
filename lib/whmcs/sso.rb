@@ -9,7 +9,15 @@ module Whmcs
         email: email,
         password2: password
       }
-      client.exec!('ValidateLogin', data)
+      response = client.exec!('ValidateLogin', data)
+      user = Whmcs::User.new
+      if response['result'] == 'success'
+        user.id = response['userid']
+        user.load!
+      else
+        user.errors = [response.to_s]
+      end
+      user
     end
 
   end
