@@ -15,11 +15,15 @@ module Whmcs
                   :phone,
                   :errors,
                   :active,
+                  :credits,
+                  :balance,
                   :details, # Module specific data
                   :new_password # Place holder to set new password.
 
     def initialize(userdata = nil)
       @client = Whmcs::Client.new
+      self.errors = []
+      self.details = {}
       self.load!(userdata) unless userdata.nil?
     end
 
@@ -41,9 +45,9 @@ module Whmcs
       self.country = data['countrycode']
       self.phone = data['phonenumber']
       self.active = data['status'] == 'Active'
+      self.credits = data['credit'].to_f
       self.details = {
         last_login: data['lastlogin'],
-        credit: data['credit'],
         group_id: data['groupid'],
         two_factor_auth: data['twofaenabled'],
         user_id: data['userid'],
