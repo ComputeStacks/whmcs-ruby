@@ -4,7 +4,8 @@
 # next_step = redirect URL.
 #
 # products = [{
-#   'product_id' => configurable_id,
+#   'product_id' => product_external_id,
+#   'billing_resource_id' => external_id,
 #   'label' => service_name,
 #   'qty' => 1
 # }]
@@ -30,22 +31,22 @@ module Whmcs
       return false if self.user.nil?
       order_data = {}
       self.products.each_with_index do |i,k|
-        order_data["pid[#{k}]"] = Whmcs.config[:container_product_id]
-        order_data["domain[#{k}]"] = i['label']
-        items = { i['product_id'].to_i => i['qty'].to_i }
+        order_data["pid[#{k}]"] = i['product_id'].to_i
+        order_data["domain[#{k}]"] = i['label'] unless i['label'].nil? || i['label'].blank?
+        items = { i['billing_resource_id'].to_i => i['qty'].to_i }
         order_data["configoptions[#{k}]"] = Base64.urlsafe_encode64(PhpSerialization.dump(items))
       end
-      # 'paymentmethod' => Whmcs.config[:default_payment_method],
-      # 'noinvoice' => !Whmcs.config[:order_invoice],
-      # 'noinvoiceemail' => !Whmcs.config[:email_invoice],
       data = {
         'clientid' => self.user.id,
-        'clientip' => self.user_ip,
-        'paymentmethod' => Whmcs.config[:default_payment_method],
-        'noemail' => !Whmcs.config[:email_order]
+        'paymentmethod' => Whmcs.config[:default_payment_method]
       }
+      data['clientip'] = self.user_ip if self.user_ip
+      data['noemail'] = true unless Whmcs.config[:email_order]
+      data['noinvoice'] = true unless Whmcs.config[:order_invoice]
+      data['noinvoiceemail'] = true unless Whmcs.config[:email_invoice]
       data.merge!(order_data)
       response = @client.exec!('AddOrder', data)
+      (self.errors =|| []) << response # TEMP.
       if response['result'] == 'success'
         self.invoice = Whmcs::Invoice.new(response) if response['invoiceid']
         if self.invoice
@@ -54,7 +55,7 @@ module Whmcs
         end
         true
       else
-        self.errors = [response['message']]
+        (self.errors =|| []) << response['message']
         false
       end
     end

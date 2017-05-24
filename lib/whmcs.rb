@@ -19,6 +19,7 @@ module Whmcs
   # enable_sso: [true|false]
   #
   @config = {
+              order_redirect: true,
               endpoint: nil,
               api_key: nil,
               api_secret: nil,
@@ -26,7 +27,6 @@ module Whmcs
               legacy_login: false,
               enable_sso: true,
               default_payment_method: 'stripe',
-              container_product_id: 1,
               email_invoice: true,
               email_order: true,
               order_invoice: true              
