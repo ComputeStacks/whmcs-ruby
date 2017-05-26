@@ -53,10 +53,7 @@ module Whmcs
       if response['result'] == 'success'
         self.invoice = Whmcs::Invoice.new(response) if response['invoiceid']
         self.id = response['orderid']
-        if self.invoice
-          goto = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{self.id}"})
-          self.next_step = "#{@client.endpoint}/#{goto}"
-        end
+        self.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"}) if self.invoice
         self.service_ids = response['productids'].split(',').map { |s| s.to_i } if response['productids']
         true
       else
