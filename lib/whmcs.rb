@@ -12,6 +12,7 @@ require 'whmcs/invoice_item'
 require 'whmcs/order'
 require 'whmcs/sso'
 require 'whmcs/user'
+require 'whmcs/subscription'
 require 'whmcs/version'
 
 module Whmcs

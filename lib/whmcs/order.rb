@@ -51,9 +51,11 @@ module Whmcs
       response = @client.exec!('AddOrder', data)
       self.result = response
       if response['result'] == 'success'
-        self.invoice = Whmcs::Invoice.new(response) if response['invoiceid']
         self.id = response['orderid']
-        self.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"}) if self.invoice
+        if response['invoiceid']
+          self.invoice = Whmcs::Invoice.new(response)         
+          self.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
+        end
         self.service_ids = response['productids'].split(',').map { |s| s.to_i } if response['productids']
         true
       else

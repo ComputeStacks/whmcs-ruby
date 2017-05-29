@@ -35,3 +35,10 @@ order.user = u
 order.products = products
 order.user_ip = '127.0.0.1'
 ```
+
+## Upgrade Product (Dry Run)
+```
+Whmcs.configure_with('config-sample.yml')
+sub = Whmcs::Subscription.find(73)
+result = sub.modify!(nil, 2, nil, true)
+```
