@@ -82,7 +82,7 @@ module Whmcs
       return false if new_qty.nil? && new_product_id.nil?
       data = {
         'serviceid' => self.id,
-        'paymentmethod' => self.details[:paymentmethod],
+        'paymentmethod' => self.details[:paymentmethod].nil? ? Whmcs.config[:default_payment_method] : self.details[:paymentmethod],
         'type' => new_product_id.nil? ? 'configoptions' : 'product'
       }
       data['newproductbillingcycle'] = self.term if change_billing_cycle
