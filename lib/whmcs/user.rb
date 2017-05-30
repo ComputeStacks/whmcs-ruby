@@ -74,7 +74,7 @@ module Whmcs
         postcode: self.zip,
         country: self.country,
         phonenumber: self.phone,
-        password2: SecureRandom.base64(8)
+        password2: self.new_password.nil? ? SecureRandom.base64(8) : self.new_password
       }
       response = @client.exec!('AddClient', data)
       if response['result'] && response['result'] == 'success'
@@ -101,6 +101,7 @@ module Whmcs
         country: self.country,
         phonenumber: self.phone,
       }
+      data[:password2] = self.new_password unless self.new_password.nil?      
       response = @client.exec!('UpdateClient', data)
       if response['result'] == 'success'
         true
