@@ -106,15 +106,15 @@ module Whmcs
       end
       if dry_run
         {
-          'from' => "#{result['originalvalue1']} x #{result['configname1']}",
-          'to' => result['newvalue1'],
-          'price' => result['price1']
+          'from' => "#{response['originalvalue1']} x #{response['configname1']}",
+          'to' => response['newvalue1'],
+          'price' => response['price1']
         }
       else
         new_order = Whmcs::Order.new
         new_order.id = response['orderid']
-        if result['invoiceid']
-          new_order.invoice = Whmcs::Invoice.find(result['invoiceid'])
+        if response['invoiceid']
+          new_order.invoice = Whmcs::Invoice.find(response['invoiceid'])
           if new_order.invoice
             new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
           end          
