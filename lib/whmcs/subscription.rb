@@ -101,6 +101,7 @@ module Whmcs
       unless response['result'] == 'success'
         result = {'success' => false}
         result.merge!(response)
+        result.merge!(data)
         return result
       end
       if dry_run
