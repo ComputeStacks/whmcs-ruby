@@ -90,6 +90,7 @@ module Whmcs
       if new_product_id
         # Product Change
         data['newproductid'] = new_product_id
+        data['newproductbillingcycle'] = self.term.nil? ? 'Monthly' : self.term
       elsif new_qty.to_i > 0
         # QTY Change
         data["configoptions[#{self.details[:qty_config_id]}]"] = new_qty
@@ -99,8 +100,7 @@ module Whmcs
       #return data
       response = @client.exec!('UpgradeProduct', data)
       unless response['result'] == 'success'
-        result = {'success' => false}
-        result.merge!(response)
+        result = { 'success' => false, 'message' => response.body.to_s }
         result.merge!(data)
         return result
       end
