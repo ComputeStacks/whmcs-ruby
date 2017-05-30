@@ -3,6 +3,8 @@
 #
 # next_step = redirect URL.
 #
+# status: [pending, active, suspended, terminated, cancelled, fraud]
+#
 # products = [{
 #   'product_id' => product_external_id,
 #   'billing_resource_id' => external_id,
@@ -14,6 +16,7 @@ module Whmcs
   class Order
 
     attr_accessor :id,
+                  :status,
                   :user,
                   :products,
                   :invoice,
@@ -25,6 +28,7 @@ module Whmcs
 
     def initialize
       @client = Whmcs::Client.new
+      self.status = 'pending'
       self.products = []
       self.service_ids = []
     end
@@ -70,6 +74,20 @@ module Whmcs
 
     def destroy!
       
+    end
+
+    def self.find(order_id)
+      client = Whmcs::Client.new
+      order_data = client.exec!('GetOrders', { 'id' => order_id })
+      if order_data['result'] == 'success' && order_data['totalresults'].to_i > 0
+        data = order_data['orders']['order'].first
+        order = self.new
+        order.status = data['status'].downcase
+        order.user = Whmcs::User.find(data['userid'])
+        order
+      else
+        nil
+      end
     end
 
   end
