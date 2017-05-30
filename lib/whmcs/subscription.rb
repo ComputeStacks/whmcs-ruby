@@ -116,9 +116,12 @@ module Whmcs
       end
     end
 
-  #   "configoptions"=>
-  # {"configoption"=>
-  #   [{"id"=>7, "option"=>"Container", "type"=>"quantity", "value"=>1}]}}
+
+    ##
+    # Cancel a subscription
+    def cancel!
+      @client.exec!('AddCancelRequest', { 'serviceid' => self.id, 'type' => 'Immediate' })
+    end
 
     def self.find(id)
       client = Whmcs::Client.new

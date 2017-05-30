@@ -2,7 +2,7 @@
 
 ## WHMCS Settings
 
-**General Setings -> Other ->**: Only require First & Last name on client registration
+**General Settings -> Other ->**: Only require First & Last name on client registration
 
 ## Development Instances
 
