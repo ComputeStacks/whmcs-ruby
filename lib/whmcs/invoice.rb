@@ -40,12 +40,12 @@ module Whmcs
       else
         invoice_data = data
       end
-      the_user = Whmcs::User.new
-      the_user.id = invoice_data['userid']
-      the_user.load!
+      # the_user = Whmcs::User.new
+      # the_user.id = invoice_data['userid']
+      # the_user.load!
       self.id = invoice_data['invoiceid']
       self.invoice_number = invoice_data['invoicenum']
-      self.user = the_user
+      # self.user = the_user
       self.date = invoice_data['date']
       self.due = invoice_data['duedate']
       self.subtotal = invoice_data['subtotal'].to_f
