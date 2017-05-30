@@ -98,7 +98,7 @@ module Whmcs
         city: self.city,
         state: self.state,
         postcode: self.zip,
-        country: self.country,
+        country: self.country.nil? ? 'US' : self.country,
         phonenumber: self.phone,
       }
       data[:password2] = self.new_password unless self.new_password.nil?      
