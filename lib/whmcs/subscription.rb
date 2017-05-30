@@ -27,9 +27,7 @@ module Whmcs
       if data.empty?
         data = @client.exec!('GetClientsProducts', { 'serviceid' => self.id })['products']['product'][0]
       end
-      u = Whmcs::User.new
-      u.id = data['clientid']
-      self.user = u
+      self.user = Whmcs::User.find(data['clientid'])
       self.id = data['id']
       self.created_at = Time.parse(data['regdate'])
       self.name = data['name']
@@ -116,6 +114,7 @@ module Whmcs
         if response['invoiceid']
           new_order.invoice = Whmcs::Invoice.find(response['invoiceid'])
           if new_order.invoice
+            self.load! if self.user.nil?
             new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
           end          
         end
