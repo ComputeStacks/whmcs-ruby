@@ -111,13 +111,13 @@ module Whmcs
         new_order = Whmcs::Order.new
         new_order.id = response['orderid']
         if response['invoiceid'] && response['invoiceid'].to_i > 0
-          new_invoice = Whmcs::Invoice.find(response['invoiceid'])
-          # unless new_invoice.nil?
-          #   self.load! if self.user.nil?
-          #   if new_invoice.status == 'unpaid'
-          #     new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
-          #   end            
-          # end    
+          new_invoice = Whmcs::Invoice.find(response['invoiceid'], false)
+          unless new_invoice.nil?
+            self.load! if self.user.nil?
+            if new_invoice.status == 'unpaid'
+              new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
+            end            
+          end    
           new_order.invoice = new_invoice      
         end
         new_order

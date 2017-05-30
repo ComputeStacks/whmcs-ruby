@@ -32,7 +32,7 @@ module Whmcs
       self.items = []
     end
 
-    def load!(data = {})
+    def load!(load_user, data = {})
       return false if data.empty? && self.id.nil?
       if data.empty?
         invoice_data = @client.exec!('GetInvoice', { 'invoiceid' => self.id })
@@ -40,12 +40,12 @@ module Whmcs
       else
         invoice_data = data
       end
-      # the_user = Whmcs::User.new
-      # the_user.id = invoice_data['userid']
-      # the_user.load!
+      the_user = Whmcs::User.new
+      the_user.id = invoice_data['userid']
+      the_user.load! if load_user
       self.id = invoice_data['invoiceid']
       self.invoice_number = invoice_data['invoicenum']
-      # self.user = the_user
+      self.user = the_user
       self.date = invoice_data['date']
       self.due = invoice_data['duedate']
       self.subtotal = invoice_data['subtotal'].to_f
@@ -68,10 +68,12 @@ module Whmcs
       }
     end
 
-    def self.find(id)
+    ##
+    # For some expensive API calls, disable loading user.
+    def self.find(id, load_user = true)
       return nil unless id.to_i > 0
       invoice = self.new({ 'invoiceid' => id })
-      invoice.load!
+      invoice.load!(load_user, {})
       invoice
     end
 
