@@ -94,11 +94,15 @@ module Whmcs
         # QTY Change
         data["configoptions[#{self.details[:qty_config_id]}]"] = new_qty
       else
-        return false
+        return {'success' => false, 'message' => 'Missing ProductID or QTY change.'}
       end
       #return data
       response = @client.exec!('UpgradeProduct', data)
-      return false unless response['result'] == 'success'
+      unless response['result'] == 'success'
+        result = {'success' => false}
+        result.merge!(response)
+        return result
+      end
       if dry_run
         {
           'from' => "#{result['originalvalue1']} x #{result['configname1']}",
