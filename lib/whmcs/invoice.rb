@@ -69,6 +69,7 @@ module Whmcs
     end
 
     def self.find(id)
+      return nil if id.to_i > 0
       invoice = self.new({ 'invoiceid' => id })
       invoice.load!
       invoice

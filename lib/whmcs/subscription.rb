@@ -110,7 +110,7 @@ module Whmcs
       else
         new_order = Whmcs::Order.new
         new_order.id = response['orderid']
-        if response['invoiceid'] && !response['invoiceid'].zero?
+        if response['invoiceid'] && response['invoiceid'].to_i > 0
           new_order.invoice = Whmcs::Invoice.find(response['invoiceid'])
           if new_order.invoice
             self.load! if self.user.nil?
