@@ -114,8 +114,10 @@ module Whmcs
         new_order = Whmcs::Order.new
         new_order.id = response['orderid']
         if result['invoiceid']
-          new_order.invoice = Whmcs::Invoice.new(response)
-          new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
+          new_order.invoice = Whmcs::Invoice.find(result['invoiceid'])
+          if new_order.invoice
+            new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
+          end          
         end
         new_order
       end
