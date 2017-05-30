@@ -95,31 +95,30 @@ module Whmcs
       else
         return {'success' => false, 'message' => 'Missing ProductID or QTY change.'}
       end
-      return data
-      # response = @client.exec!('UpgradeProduct', data)
-      # unless response['result'] == 'success'
-      #   result = { 'success' => false, 'message' => response.body.to_s }
-      #   result.merge!(data)
-      #   return result
-      # end
-      # if dry_run
-      #   {
-      #     'from' => "#{response['originalvalue1']} x #{response['configname1']}",
-      #     'to' => response['newvalue1'],
-      #     'price' => response['price1']
-      #   }
-      # else
-      #   new_order = Whmcs::Order.new
-      #   new_order.id = response['orderid']
-      #   if response['invoiceid'] && !response['invoiceid'].to_s.blank?
-      #     new_order.invoice = Whmcs::Invoice.find(response['invoiceid'])
-      #     if new_order.invoice
-      #       self.load! if self.user.nil?
-      #       new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
-      #     end          
-      #   end
-      #   new_order
-      # end
+      response = @client.exec!('UpgradeProduct', data)
+      unless response['result'] == 'success'
+        result = { 'success' => false, 'message' => response.body.to_s }
+        result.merge!(data)
+        return result
+      end
+      if dry_run
+        {
+          'from' => "#{response['originalvalue1']} x #{response['configname1']}",
+          'to' => response['newvalue1'],
+          'price' => response['price1']
+        }
+      else
+        new_order = Whmcs::Order.new
+        new_order.id = response['orderid']
+        if response['invoiceid'] && !response['invoiceid'].zero?
+          new_order.invoice = Whmcs::Invoice.find(response['invoiceid'])
+          if new_order.invoice
+            self.load! if self.user.nil?
+            new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
+          end          
+        end
+        new_order
+      end
     end
 
 
