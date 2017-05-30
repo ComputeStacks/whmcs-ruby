@@ -119,7 +119,7 @@ module Whmcs
       #     end          
       #   end
       #   new_order
-      end
+      # end
     end
 
 
