@@ -66,6 +66,7 @@ module Whmcs
         payment_method: invoice_data['paymentmethod'],
         notes: invoice_data['notes']
       }
+      true
     end
 
     ##
