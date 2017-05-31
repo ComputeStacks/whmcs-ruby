@@ -116,8 +116,8 @@ module Whmcs
           unless new_invoice.nil?            
             if new_invoice.status == 'unpaid'
               Whmcs.logger.info "Subscription Modification - Loading Redirect URL"
-              self.load! if self.user.nil?
-              new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
+              # self.load! if self.user.nil?
+              # new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
             end            
           end    
           new_order.invoice = new_invoice      
