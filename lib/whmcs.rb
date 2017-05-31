@@ -4,6 +4,7 @@ require 'yaml'
 require 'securerandom'
 require 'httparty'
 require 'php_serialization'
+require 'logger'
 
 require 'whmcs/client'
 require 'whmcs/errors'
@@ -35,25 +36,34 @@ module Whmcs
 
   @valid_config_keys = @config.keys
 
-  # Configure through hash
-  def self.configure(opts = {})
-    opts.each {|k,v| @config[k.to_sym] = v if @valid_config_keys.include? k.to_sym}
-  end
+  class << self
 
-  # Configure through yaml file
-  def self.configure_with(path_to_yaml_file)
-    begin
-      config = YAML::load(IO.read(path_to_yaml_file))
-    rescue Errno::ENOENT
-      log(:warning, "YAML configuration file couldn't be found. Using defaults."); return
-    rescue Psych::SyntaxError
-      log(:warning, "YAML configuration file contains invalid syntax. Using defaults."); return
+    attr_writer :logger
+
+    def logger
+      @logger ||= Logger.new($stdout).tap { |log| log.progname = 'WHMCS' }
     end
-    configure(config)
-  end
 
-  def self.config
-    @config
-  end
+    # Configure through hash
+    def configure(opts = {})
+      opts.each {|k,v| @config[k.to_sym] = v if @valid_config_keys.include? k.to_sym}
+    end
+
+    # Configure through yaml file
+    def configure_with(path_to_yaml_file)
+      begin
+        config = YAML::load(IO.read(path_to_yaml_file))
+      rescue Errno::ENOENT
+        log(:warning, "YAML configuration file couldn't be found. Using defaults."); return
+      rescue Psych::SyntaxError
+        log(:warning, "YAML configuration file contains invalid syntax. Using defaults."); return
+      end
+      configure(config)
+    end
+
+    def config
+      @config
+    end
+  end  
 
 end
