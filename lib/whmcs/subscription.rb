@@ -113,13 +113,12 @@ module Whmcs
         if response['invoiceid'] && response['invoiceid'].to_i > 0
           Whmcs.logger.info "Subscription Modification - Loading Invoice: #{response['invoiceid'].to_i}"
           new_invoice = Whmcs::Invoice.find(response['invoiceid'], false)
-          unless new_invoice.nil?            
-            if new_invoice.status == 'unpaid'
+          if new_invoice && new_invoice.status == 'unpaid'
+            if self.user && self.user.email
               Whmcs.logger.info "Subscription Modification - Loading Redirect URL"
-              # self.load! if self.user.nil?
-              # new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
-            end            
-          end    
+              new_order.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
+            end
+          end   
           new_order.invoice = new_invoice      
         end
         new_order
