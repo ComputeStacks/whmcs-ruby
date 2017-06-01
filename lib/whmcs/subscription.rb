@@ -123,6 +123,8 @@ module Whmcs
         end
         new_order
       end
+    rescue => e
+      {'error' => e.to_s}
     end
 
 
