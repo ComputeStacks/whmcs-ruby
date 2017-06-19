@@ -20,12 +20,17 @@ module Whmcs
     end
 
     def exec!(action, data = {})
-      options = {
-        identifier: api_key,
-        secret: api_secret,
+      options = {        
         action: action,
         responsetype: 'json'
       }
+      if Whmcs.config[:legacy_login]
+        options[:username] = api_key
+        options[:password] = api_secret
+      else
+        options[:identifier] = api_key
+        options[:secret] = api_secret
+      end
       options.merge!(data) unless data.nil? || data.empty?
       data = URI.encode_www_form(options)
       response = HTTParty.post("#{self.endpoint}/includes/api.php", body: data)
