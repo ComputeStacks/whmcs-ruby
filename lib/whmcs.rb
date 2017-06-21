@@ -31,7 +31,8 @@ module Whmcs
               default_payment_method: 'stripe',
               email_invoice: true,
               email_order: true,
-              order_invoice: true              
+              order_invoice: true.
+              access_key: nil         
             }
 
   @valid_config_keys = @config.keys

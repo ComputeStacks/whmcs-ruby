@@ -31,6 +31,9 @@ module Whmcs
         options[:identifier] = api_key
         options[:secret] = api_secret
       end
+      if Whmcs.config[:access_key]
+        options[:accesskey] = Whmcs.config[:access_key]
+      end
       options.merge!(data) unless data.nil? || data.empty?
       data = URI.encode_www_form(options)
       response = HTTParty.post("#{self.endpoint}/includes/api.php", body: data)
