@@ -31,7 +31,7 @@ module Whmcs
       return nil if self.id.nil? && userdata.nil?
       response = userdata.nil? ? @client.exec!('GetClientsDetails', { 'clientid' => self.id }) : userdata
       return nil unless response['result'] == 'success'
-      data = response['client']
+      data = response['client'].nil? ? response : response['client']
       self.id = data['id']
       self.email = data['email']
       self.fname = data['firstname']
