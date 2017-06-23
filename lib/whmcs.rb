@@ -32,7 +32,8 @@ module Whmcs
               email_invoice: true,
               email_order: true,
               order_invoice: true,
-              access_key: nil         
+              access_key: nil,
+              pw_reset_path: nil
             }
 
   @valid_config_keys = @config.keys
