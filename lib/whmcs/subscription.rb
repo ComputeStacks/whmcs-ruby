@@ -93,29 +93,38 @@ module Whmcs
     def self.process_usage!(usage_items = [])      
       client = Whmcs::Client.new
       # Collect subscription IDs
-      subscription_ids = []
-      usage_items.each do|i|
-        next if i[:external_id].nil?
-        subscription_ids << i[:external_id] unless subscription_ids.include?(i[:external_id])
+      # subscription_ids = []
+      # usage_items.each do|i|
+      #   next if i[:external_id].nil?
+      #   subscription_ids << i[:external_id] unless subscription_ids.include?(i[:external_id])
+      # end
+      user_ids = []
+      usage_items.each do |i|
+        next if i[:user].nil? || i[:user][:external_id].nil?
+        user_ids << i[:user][:external_id] unless user_ids.include?(i[:user][:external_id])
       end
       billables = []
       # Aggregate usage by external_id
       # Ignore items that have no external_id
-      subscription_ids.each do |i|
-        total = 0.0
-        qty = 0.0
-        client_id = nil
-        product = nil
+      user_ids.each do |i|
+        products = []        
         usage_items.each do |item|
-          if item[:external_id] == i
-            total += item[:total]
-            qty += item[:qty]
-            client_id = item[:user][:external_id].to_i
-            product = item[:product][:name]
+          if item[:user] && i[:user][:external_id] == i
+            products << item[:product][:id] unless products.include?(item[:product][:id])
           end
         end
-        next if client_id.nil? # Shouldn't happen
-        billables << { id: i, total: total, qty: qty , client_id: client_id, product: product }
+        products.each do |p|
+          total = 0.0
+          qty = 0.0
+          product = nil
+          usage_items.each do |item|
+            next if item[:user].nil? || item[:user][:external_id] != i
+            total += item[:total]
+            qty += item[:qty]
+            product = item[:product][:name] unless item[:product].nil?
+          end
+          billables << { total: total, qty: qty , client_id: i, product: product } unless product.nil? || total.zero?
+        end        
       end
 
       # Due Date
