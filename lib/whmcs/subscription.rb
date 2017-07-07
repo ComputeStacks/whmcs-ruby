@@ -66,6 +66,89 @@ module Whmcs
       end
     end
 
+    ##
+    # Process usage items (Create billable items)
+    #
+    # 
+    #
+    # [{
+    #   :subscription_id=>562,
+    #   :subscription_product_id=>569,
+    #   :product=>{:id=>4, :name=>"storage", :external_id=>nil, :unit=>1},
+    #   :billing_resource=>{:id=>4, :external_id=>nil, :billing_plan=>1},
+    #   :container_service_id=>433,
+    #   :container_id=>625,
+    #   :device_id=>nil,
+    #   :user=>{:id=>1, :external_id=>"2", :email=>"kris@computestacks.com"},
+    #   :external_id=>nil,
+    #   :total=>0.0882,
+    #   :qty=>0.882,
+    #   :period_start=>TimeInUTC,
+    #   :period_end=>TimeInUTC,
+    #   :usage_items=>
+    #     [
+    #       {:id=>33, :rate=>0.1, :qty=>0.221, :total=>0.0221, :period_start=>TimeInUTC, :period_end=>TimeInUTC}
+    #     ]
+    #   }]
+    def self.process_usage!(usage_items = [])      
+      client = Whmcs::Client.new
+      # Collect subscription IDs
+      subscription_ids = []
+      usage_items.each do|i|
+        next if i[:external_id].nil?
+        subscription_ids << i[:external_id] unless subscription_ids.include?(i[:external_id])
+      end
+      billables = []
+      # Aggregate usage by external_id
+      # Ignore items that have no external_id
+      subscription_ids.each do |i|
+        total = 0.0
+        qty = 0.0
+        client_id = nil
+        product = nil
+        usage_items.each do |item|
+          if item[:external_id] == i
+            total += item[:total]
+            qty += item[:qty]
+            client_id = item[:user][:external_id].to_i
+            product = item[:product][:name]
+          end
+        end
+        next if client_id.nil? # Shouldn't happen
+        billables << { id: i, total: total, qty: qty , client_id: client_id, product: product }
+      end
+
+      # Due Date
+      t = Time.new(Time.now.utc.year,Time.now.utc.month)+45*24*3600
+      due_date = Time.new(t.year, t.month, 1).strftime('%Y-%m-%d')
+      errors = []
+      # Generate Billable Items
+      billables.each do |i|
+        data = {
+          'clientid' => i[:client_id],
+          'description' => i[:product],
+          'amount' => i[:total],
+          'invoiceaction' => 'duedate',
+          'duedate' => due_date,
+          'hours' => i[:qty]
+        }
+        result = client.exec!('AddBillableItem', data)
+        if result['result'] == 'success'
+          next
+        else
+          errors << result['message']
+          next
+        end
+      end
+      if errors.empty?
+        { 'success' => true }
+      else
+        { 'success' => false, 'errors' => errors}
+      end
+
+    end
+    
+
     def create!
       raise Whmcs::NotImplemented, 'To create a service, please place an order.'
     end
