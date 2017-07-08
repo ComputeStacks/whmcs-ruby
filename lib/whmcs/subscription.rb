@@ -109,7 +109,7 @@ module Whmcs
       user_ids.each do |i|
         products = []        
         usage_items.each do |item|
-          if item[:user] && i[:user][:external_id] == i
+          if item[:user] && item[:user][:external_id] == i
             products << item[:product][:id] unless products.include?(item[:product][:id])
           end
         end
