@@ -110,20 +110,19 @@ module Whmcs
         products = []        
         usage_items.each do |item|
           if item[:user] && item[:user][:external_id] == i
-            products << item[:product][:id] unless products.include?(item[:product][:id])
+            products << item[:product][:name] unless products.include?(item[:product][:name])
           end
         end
         products.each do |p|
           total = 0.0
           qty = 0.0
-          product = nil
           usage_items.each do |item|
             next if item[:user].nil? || item[:user][:external_id] != i
+            next unless item[:product][:name] == p
             total += item[:total]
             qty += item[:qty]
-            product = item[:product][:name] unless item[:product].nil?
           end
-          billables << { total: total, qty: qty , client_id: i, product: product } unless product.nil? || total.zero?
+          billables << { total: total, qty: qty , client_id: i, product: p } unless total.zero?
         end        
       end
 
