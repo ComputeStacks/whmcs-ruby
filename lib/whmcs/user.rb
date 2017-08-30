@@ -17,6 +17,7 @@ module Whmcs
                   :active,
                   :credits,
                   :balance,
+                  :has_payment_method,
                   :details, # Module specific data
                   :new_password # Place holder to set new password.
 
@@ -46,6 +47,7 @@ module Whmcs
       self.phone = data['phonenumber']
       self.active = data['status'] == 'Active'
       self.credits = data['credit'].to_f
+      self.has_payment_method = data['gatewayid'].nil? ? false : !data['gatewayid'].empty?
       self.details = {
         last_login: data['lastlogin'],
         group_id: data['groupid'],
