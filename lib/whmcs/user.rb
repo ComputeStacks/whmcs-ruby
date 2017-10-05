@@ -1,3 +1,8 @@
+##
+# User
+#
+# Fields set as 'in progress' can be omitted at this time. IF it's easy to integrate, then we suggest they be set.
+# 
 module Whmcs
   class User
 
@@ -14,11 +19,11 @@ module Whmcs
                   :country,
                   :phone,
                   :errors,
-                  :active,
-                  :credits,
-                  :balance,
-                  :has_payment_method,
-                  :details, # Module specific data
+                  :active, # In progress. 
+                  :credits, 
+                  :balance, 
+                  :has_payment_method, # In progress: This will probably be used for Metered Billing Orders.
+                  :details, # Module specific data.
                   :new_password # Place holder to set new password.
 
     def initialize(userdata = nil)
@@ -47,7 +52,7 @@ module Whmcs
       self.phone = data['phonenumber']
       self.active = data['status'] == 'Active'
       self.credits = data['credit'].to_f
-      self.has_payment_method = data['gatewayid'].nil? ? false : !data['gatewayid'].empty?
+      self.has_payment_method = data['gatewayid'].nil? ? false : !data['gatewayid'].empty? # If a remote token is stored, then a payment method exists.
       self.details = {
         last_login: data['lastlogin'],
         group_id: data['groupid'],
@@ -151,6 +156,7 @@ module Whmcs
       search(limit_start, limit)
     end
 
+    # Optional. Currently not in use.
     def self.search(limit_start, limit, search_param = nil)
       data = nil 
       if limit_start

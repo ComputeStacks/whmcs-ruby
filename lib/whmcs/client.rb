@@ -1,8 +1,9 @@
-# endpoint: example https://my-whmcs.com
-# api_key: admin username, or api identifier.
-# api_secret: secret api key, or password.
-# legacy_login: [true|false] true if using the whmcs password 
-# shared_secret: used for autoauth
+##
+# Remote Client: This is used to make connections to your integration. 
+# This is an **OPTIONAL** Class -- this is never directly access by ComputeStacks.
+#
+# The Client class is just a helper to reduce the amount of duplicate code in the other modules.
+# For this billing integration, it's being used to handle all direct communication with WHMCS & generate the authenticated URL's for SSO.
 #
 module Whmcs
   class Client

@@ -1,3 +1,8 @@
+##
+# Subscription (Service) Management
+#
+# All Fields Required.
+#
 module Whmcs
   class Subscription
 
@@ -42,6 +47,7 @@ module Whmcs
         paymentmethod: data['paymentmethod'],
         qty_config_id: qty_config_id(data['configoptions']['configoption'])
       }
+      true
     end
 
     ##
@@ -92,12 +98,6 @@ module Whmcs
     #   }]
     def self.process_usage!(usage_items = [])      
       client = Whmcs::Client.new
-      # Collect subscription IDs
-      # subscription_ids = []
-      # usage_items.each do|i|
-      #   next if i[:external_id].nil?
-      #   subscription_ids << i[:external_id] unless subscription_ids.include?(i[:external_id])
-      # end
       user_ids = []
       usage_items.each do |i|
         next if i[:user].nil? || i[:user][:external_id].nil?
@@ -105,7 +105,7 @@ module Whmcs
       end
       billables = []
       # Aggregate usage by external_id
-      # Ignore items that have no external_id
+      # Ignore items that have no external_id (Only services with an external_id are stored)
       user_ids.each do |i|
         products = []        
         usage_items.each do |item|
@@ -126,12 +126,13 @@ module Whmcs
         end        
       end
 
-      # Due Date
+      # Format Due Date for WHMCS.
       t = Time.new(Time.now.utc.year,Time.now.utc.month)+45*24*3600
       due_date = Time.new(t.year, t.month, 1).strftime('%Y-%m-%d')
       errors = []
       # Generate Billable Items
       billables.each do |i|
+        # Data format sent to WHMCS.
         data = {
           'clientid' => i[:client_id],
           'description' => i[:product],
@@ -154,8 +155,7 @@ module Whmcs
         { 'success' => false, 'errors' => errors}
       end
 
-    end
-    
+    end    
 
     def create!
       raise Whmcs::NotImplemented, 'To create a service, please place an order.'
@@ -237,10 +237,9 @@ module Whmcs
 
     private
 
-    ##
-    # Determine Quantity
-    #
-    #
+    ## Optional helper methods for use locally in module #####
+
+    # Determine correct quantity
     def format_qty(config_options)
       qty = 1
       config_options.each do |i|
@@ -252,9 +251,7 @@ module Whmcs
       qty
     end
 
-    ##
     # Return configid of the Quantity Config Option
-    #
     def qty_config_id(config_options)
       config_options.each do |i|
         if i['option'] == 'Container' && i['type'] == 'quantity'

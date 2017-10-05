@@ -1,13 +1,11 @@
 ##
-# WHMCS Order
+# Order
 #
-# next_step = redirect URL.
-#
-# status: [pending, active, suspended, terminated, cancelled, fraud]
+# All fields required.
 #
 # products = [{
-#   'product_id' => product_external_id,
-#   'billing_resource_id' => external_id,
+#   'product_id' => product_external_id, # For containers, this references the primary container product (with a price of $0.00)
+#   'billing_resource_id' => external_id, ## For Containers, this references the configurable product (Which sets price based on QTY). Not used for Servers.
 #   'label' => service_name,
 #   'qty' => 1
 # }]
@@ -16,13 +14,13 @@ module Whmcs
   class Order
 
     attr_accessor :id,
-                  :status,
+                  :status, # Available Statuses: pending, active, suspended, terminated, cancelled, fraud
                   :user,
                   :products,
                   :invoice,
                   :user_ip,
                   :errors,
-                  :next_step,
+                  :next_step, # This is the Redirect URL. This will forward the user to your final checkout process.
                   :result,
                   :service_ids # Resulting services created
 
@@ -33,6 +31,13 @@ module Whmcs
       self.service_ids = []
     end
 
+    # Create a new order. This step needs to set locally:
+    #
+    # - invoice (if one is generated)
+    # - next_step (if necessary, otherwise will instantly provision service)
+    # - service_ids: An array of IDs: example => [1,2,3,4,5] or just 1: [5]
+    # - result : Store the raw result -> this is helpful for debugging purposes.
+    #
     def create!
       return false if self.products.empty?
       return false if self.user.nil?
@@ -68,14 +73,10 @@ module Whmcs
       end
     end
 
-    def cancel!
-      
-    end
-
-    def destroy!
-      
-    end
-
+    # Find an order by its an ID.
+    #
+    # Currently this is not used and can be omitted, but may be at some point in the future.
+    #
     def self.find(order_id)
       client = Whmcs::Client.new
       order_data = client.exec!('GetOrders', { 'id' => order_id })

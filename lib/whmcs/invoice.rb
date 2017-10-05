@@ -1,13 +1,8 @@
 ##
 # Invoice
-# data = {
-#   date_paid: ,
-#   last_capture_attempt: ,
-#   tax_rate: ,
-#   tax2_rate: ,
-#   payment_method: ,
-#   notes: 
-# }
+# 
+# All fields required.
+#
 module Whmcs
   class Invoice
 
@@ -32,6 +27,7 @@ module Whmcs
       self.items = []
     end
 
+    # Format remote invoice data
     def load!(load_user, data = {})
       return false if data.empty? && self.id.nil?
       if data.empty?
@@ -70,7 +66,9 @@ module Whmcs
     end
 
     ##
-    # For some expensive API calls, disable loading user.
+    # Find an Invoice by its ID.
+    #
+    # You can optionally disable loading the user data for large 'expensive', api calls.
     def self.find(id, load_user = true)
       return nil unless id.to_i > 0
       invoice = self.new({ 'invoiceid' => id })

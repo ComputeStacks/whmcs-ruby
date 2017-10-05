@@ -1,3 +1,8 @@
+##
+# InvoiceItem
+#
+# All fields required.
+#
 module Whmcs
   class InvoiceItem
 

@@ -18,8 +18,8 @@ require 'whmcs/version'
 
 module Whmcs
   ## Configuration defaults
-  # enable_sso: [true|false]
-  #
+  # None of these are required fields. You can define as few or as many configuration fields as required by your Billing Integration.
+  # Any setting here will be made available in ComputeStacks, and their values passed on each initialization of your module.
   @config = {
               order_redirect: true,
               endpoint: nil,
