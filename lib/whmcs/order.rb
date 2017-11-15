@@ -20,6 +20,7 @@ module Whmcs
                   :invoice,
                   :user_ip,
                   :errors,
+                  :promocode,
                   :next_step, # This is the Redirect URL. This will forward the user to your final checkout process.
                   :result,
                   :service_ids # Resulting services created
@@ -29,6 +30,7 @@ module Whmcs
       self.status = 'pending'
       self.products = []
       self.service_ids = []
+      self.promocode = nil
     end
 
     # Create a new order. This step needs to set locally:
@@ -56,6 +58,7 @@ module Whmcs
       data['noemail'] = true unless Whmcs.config[:email_order]
       data['noinvoice'] = true unless Whmcs.config[:order_invoice]
       data['noinvoiceemail'] = true unless Whmcs.config[:email_invoice]
+      data['promocode'] = self.promocode if self.promocode
       data.merge!(order_data)
       response = @client.exec!('AddOrder', data)
       self.result = response
