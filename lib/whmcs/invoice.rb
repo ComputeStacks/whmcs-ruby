@@ -51,8 +51,10 @@ module Whmcs
       self.total = invoice_data['total'].to_f
       self.balance = invoice_data['balance'].to_f
       self.status = invoice_data['status'].downcase
-      invoice_data['items']['item'].each do |i|
-        self.items << Whmcs::InvoiceItem.new(i)
+      if invoice_data['items']
+        invoice_data['items']['item'].each do |i|
+          self.items << Whmcs::InvoiceItem.new(i)
+        end
       end
       self.details = {
         date_paid: invoice_data['datepaid'],
@@ -74,6 +76,34 @@ module Whmcs
       invoice = self.new({ 'invoiceid' => id })
       invoice.load!(load_user, {})
       invoice
+    end
+
+    ##
+    # Find all invoices
+    #
+    # Status: [Unpaid, Paid, Draft, Overdue, Cancelled, Refunded, Collections]
+    # 
+    #
+    def self.all(status, userid, limitstart, limitnum)
+      client = Whmcs::Client.new
+      opts = {}
+      opts['status'] = status if status
+      opts['limitstart'] = limitstart if limitstart
+      opts['limitnum'] = limitnum if limitnum
+      opts['userid'] = userid if userid
+      data = client.exec!('GetInvoices', opts)
+      result = {
+        'totalresults' => data['totalresults'],
+        'startnumber' => data['startnumber'],
+        'numreturned' => data['numreturned'],
+        'invoices' => []
+      }
+      data['invoices']['invoice'].each do |d|
+        new_invoice = self.new({ 'invoiceid' => d['id'] })
+        new_invoice.load!(false, d)
+        result['invoices'] << new_invoice
+      end
+      result
     end
 
   end
