@@ -33,7 +33,9 @@ module Whmcs
               email_order: true,
               order_invoice: true,
               access_key: nil,
-              pw_reset_path: nil
+              pw_reset_path: nil,
+              billing_redirect: 'clientarea.php',
+              support_redirect: 'supporttickets.php'
             }
 
   @valid_config_keys = @config.keys
