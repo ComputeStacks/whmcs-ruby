@@ -20,8 +20,9 @@ module Whmcs
                   :phone,
                   :errors,
                   :active, # In progress. 
-                  :credits, 
-                  :balance, 
+                  :credits,
+                  :balance,
+                  :has_2fa,
                   :has_payment_method, # In progress: This will probably be used for Metered Billing Orders.
                   :details, # Module specific data.
                   :new_password # Place holder to set new password.
@@ -30,6 +31,7 @@ module Whmcs
       @client = Whmcs::Client.new
       self.errors = []
       self.details = {}
+      self.has_2fa = false
       self.load!(userdata) unless userdata.nil?
     end
 
@@ -61,6 +63,7 @@ module Whmcs
         uuid: data['uuid'],
         tax_exempt: data['taxexempt']
       }
+      self.has_2fa = data['twofaenabled']
       true
     end
 
@@ -165,7 +168,7 @@ module Whmcs
           limitnum: limit
         }
         data[:search] = search_param if search_param
-      end        
+      end
       result = []
       response = Whmcs::Client.new.exec!('GetClients', data)
       return [] if response['clients'].nil? || response['clients'].empty?
