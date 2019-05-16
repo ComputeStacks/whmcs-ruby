@@ -142,9 +142,9 @@ module Whmcs
 
     # WHMCS has 3 possible values for state...lets check each.
     def load_state(result)
-      return data['statecode'] unless data['statecode'].blank?
-      return data['fullstate'] unless data['fullstate'].blank?
-      return data['state'] unless data['state'].blank?
+      return result['statecode'] unless result['statecode'].blank?
+      return result['fullstate'] unless result['fullstate'].blank?
+      return result['state'] unless result['state'].blank?
       ""
     end
 
