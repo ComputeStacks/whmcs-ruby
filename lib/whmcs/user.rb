@@ -48,7 +48,7 @@ module Whmcs
       self.address1 = data['address1']
       self.address2 = data['address2']
       self.city = data['city']
-      self.state = data['statecode']
+      self.state = load_state(data)
       self.zip = data['postcode']
       self.country = data['countrycode']
       self.phone = data['phonenumber']
@@ -80,7 +80,7 @@ module Whmcs
         address1: self.address1,
         address2: self.address2,
         city: self.city,
-        statecode: self.state,
+        state: self.state,
         postcode: self.zip,
         country: self.country,
         phonenumber: self.phone,
@@ -106,7 +106,7 @@ module Whmcs
         address1: self.address1,
         address2: self.address2,
         city: self.city,
-        statecode: self.state,
+        state: self.state,
         postcode: self.zip,
         country: self.country.nil? ? 'US' : self.country,
         phonenumber: self.phone,
@@ -138,6 +138,14 @@ module Whmcs
         self.errors = [response['message']]
         false
       end
+    end
+
+    # WHMCS has 3 possible values for state...lets check each.
+    def load_state(result)
+      return data['statecode'] unless data['statecode'].blank?
+      return data['fullstate'] unless data['fullstate'].blank?
+      return data['state'] unless data['state'].blank?
+      ""
     end
 
     ## Class Functions ####
