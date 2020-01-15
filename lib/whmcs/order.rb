@@ -46,7 +46,7 @@ module Whmcs
       order_data = {}
       self.products.each_with_index do |i,k|
         order_data["pid[#{k}]"] = i['product_id'].to_i
-        order_data["hostname[#{k}]"] = i['label'] unless i['label'].nil? || i['label'].blank?
+        order_data["hostname[#{k}]"] = i['label'] unless i['label'].nil? || i['label'].to_s == ''
         items = { i['billing_resource_id'].to_i => i['qty'].to_i }
         order_data["configoptions[#{k}]"] = Base64.urlsafe_encode64(PhpSerialization.dump(items))
       end
@@ -65,7 +65,7 @@ module Whmcs
       if response['result'] == 'success'
         self.id = response['orderid']
         if response['invoiceid']
-          self.invoice = Whmcs::Invoice.new(response)         
+          self.invoice = Whmcs::Invoice.new(response)
           self.next_step = @client.authenticated_url({email: self.user.email, goto: "viewinvoice.php?id=#{response['invoiceid']}"})
         end
         self.service_ids = response['productids'].split(',').map { |s| s.to_i } if response['productids']

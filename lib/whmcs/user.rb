@@ -2,11 +2,12 @@
 # User
 #
 # Fields set as 'in progress' can be omitted at this time. IF it's easy to integrate, then we suggest they be set.
-# 
+#
 module Whmcs
   class User
 
     attr_accessor :id,
+                  :uuid,
                   :fname,
                   :lname,
                   :company,
@@ -19,7 +20,7 @@ module Whmcs
                   :country,
                   :phone,
                   :errors,
-                  :active, # In progress. 
+                  :active, # In progress.
                   :credits,
                   :balance,
                   :has_2fa,
@@ -32,15 +33,17 @@ module Whmcs
       self.errors = []
       self.details = {}
       self.has_2fa = false
-      self.load!(userdata) unless userdata.nil?
+      self.load!(userdata) if userdata
+      self
     end
 
     def load!(userdata = nil)
-      return nil if self.id.nil? && userdata.nil?
-      response = userdata.nil? ? @client.exec!('GetClientsDetails', { 'clientid' => self.id }) : userdata
+      return nil if self.id.nil? && !userdata
+      response = userdata ? userdata : @client.exec!('GetClientsDetails', { 'clientid' => self.id })
       return nil unless response['result'] == 'success'
       data = response['client'].nil? ? response : response['client']
       self.id = data['id']
+      self.uuid = data['uuid']
       self.email = data['email']
       self.fname = data['firstname']
       self.lname = data['lastname']
@@ -54,7 +57,7 @@ module Whmcs
       self.phone = data['phonenumber']
       self.active = data['status'] == 'Active'
       self.credits = data['credit'].to_f
-      self.has_payment_method = data['gatewayid'].nil? ? false : !data['gatewayid'].empty? # If a remote token is stored, then a payment method exists.
+      self.has_payment_method = !payment_methods.empty?
       self.details = {
         last_login: data['lastlogin'],
         group_id: data['groupid'],
@@ -65,6 +68,21 @@ module Whmcs
       }
       self.has_2fa = data['twofaenabled']
       true
+    end
+
+    def payment_methods
+      result = []
+      response = @client.exec!('GetPayMethods', { clientid: self.id })
+      return result if response.body.nil? || response.body.empty? || response['result'] != 'success'
+      response['paymethods'].each do |i|
+        result << {
+          type: i['type'],
+          description: i['description'],
+          gateway: i['gateway_name'],
+          last_updated: i['last_updated']
+        }
+      end
+      result
     end
 
     def save
@@ -111,7 +129,7 @@ module Whmcs
         country: self.country.nil? ? 'US' : self.country,
         phonenumber: self.phone,
       }
-      data[:password2] = self.new_password unless self.new_password.nil?      
+      data[:password2] = self.new_password unless self.new_password.nil?
       response = @client.exec!('UpdateClient', data)
       if response['result'] == 'success'
         true
@@ -142,9 +160,9 @@ module Whmcs
 
     # WHMCS has 3 possible values for state...lets check each.
     def load_state(result)
-      return result['statecode'] unless result['statecode'].blank?
-      return result['fullstate'] unless result['fullstate'].blank?
-      return result['state'] unless result['state'].blank?
+      return result['statecode'] unless result['statecode'].nil? || result['statecode'].to_s == ''
+      return result['fullstate'] unless result['fullstate'].nil? || result['fullstate'].to_s == ''
+      return result['state'] unless result['state'].nil? || result['state'].to_s == ''
       ""
     end
 
@@ -152,12 +170,12 @@ module Whmcs
 
     def self.find(id, email = nil)
       if id
-        data = { 'clientid' => id }
+        data = { clientid: id }
       elsif email
-        data = { 'email' => email }
+        data = { email: email }
       else
         return nil
-      end    
+      end
       result = Whmcs::Client.new.exec!('GetClientsDetails', data)
       return nil if result['result'] != 'success'
       self.new(result)
@@ -167,9 +185,38 @@ module Whmcs
       search(limit_start, limit)
     end
 
+    def self.list_by_product_user(username)
+      result = []
+      start_number = 0
+      loop_until = Time.now + 600 # 10 minutes from now
+      while loop_until >= Time.now do
+        response = Whmcs::Client.new.exec!('GetClientsProducts', { limitstart: start_number, username2: username })
+        break unless response['result'] == 'success'
+        break if response['totalresults'].zero?
+
+        response['products']['product'].each do |i|
+          result << {
+            clientid: i['clientid'],
+            username: i['username'],
+            domain: i['domain'],
+            status: i['status'],
+            server: i['servername']
+          }
+        end
+
+        if (response['startnumber'] + response['numreturned']) < response['totalresults']
+          start_number = response['startnumber'] + response['numreturned']
+          next
+        else
+          break
+        end
+      end
+      result
+    end
+
     # Optional. Currently not in use.
     def self.search(limit_start, limit, search_param = nil)
-      data = nil 
+      data = nil
       if limit_start
         data = {
           limitstart: limit_start,
