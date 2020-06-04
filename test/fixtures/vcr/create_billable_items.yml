@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://<WHMCS_ENDPOINT>/includes/api.php
+    body:
+      encoding: UTF-8
+      string: action=AddBillableItem&amount=3.12&clientid=3&description=containerm&duedate=2020-07-01&hours=160.0&identifier=<WHMCS_API_KEY>&invoiceaction=duedate&responsetype=json&secret=<WHMCS_API_SECRET>
+    headers:
+      User-Agent:
+      - Faraday v1.0.1
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      set-cookie:
+      - WHMCSy551iLvnhYt7=6g2i1cibqdtdr2omng1ot5e8ne; path=/; secure; HttpOnly, SERVERID=s73;
+        path=/; HttpOnly
+      expires:
+      - Thu, 19 Nov 1981 08:52:00 GMT
+      cache-control:
+      - no-store, no-cache, must-revalidate
+      pragma:
+      - no-cache
+      content-type:
+      - application/json
+      content-length:
+      - '35'
+      date:
+      - Thu, 04 Jun 2020 21:19:32 GMT
+      server:
+      - LiteSpeed
+      strict-transport-security:
+      - max-age=16000000; includeSubDomains; preload;
+    body:
+      encoding: UTF-8
+      string: '{"result":"success","billableid":2}'
+  recorded_at: Thu, 04 Jun 2020 21:19:32 GMT
+recorded_with: VCR 6.0.0
