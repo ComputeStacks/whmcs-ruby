@@ -6,12 +6,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Kris Watson"]
   spec.email         = ["kris@computestacks.com"]
 
-  spec.summary       = %q{ Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{ Write a longer description or delete this line.}
-  spec.homepage      = "https://github.com/ComputeStacks/whmcs-rb"
+  spec.summary       = %q{ WHMCS Integration for ComputeStacks }
+  spec.description   = %q{ This provides the basic billing integration for ComputeStacks to communicate with WHMCS. }
+  spec.homepage      = "https://github.com/ComputeStacks/whmcs-ruby"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
-  spec.metadata["allowed_push_host"] = " Set to 'http://mygemserver.com'"
+  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/ComputeStacks"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
