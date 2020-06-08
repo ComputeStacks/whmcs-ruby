@@ -28,4 +28,4 @@ Using _direnv_, you can:
 
 ### Sensitive Data
 
-Before commiting new `vcr` fixtures, please scrub any personal information from them.
+Before committing new `vcr` fixtures, please scrub any personal information from them.

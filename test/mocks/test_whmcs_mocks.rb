@@ -20,11 +20,7 @@ module TestWhmcsMocks
                   :labels
 
     def initialize
-      self.labels = {
-        'cpanel' => {
-          'mycpanelserver.net' => 'jane.doe3-10@demo.computestacks.net'
-        }
-      }
+      self.labels = {}
       self.active = true
     end
 

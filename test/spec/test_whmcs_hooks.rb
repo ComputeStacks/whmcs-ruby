@@ -15,6 +15,21 @@ describe Whmcs::Hooks do
     it 'can run user_created hook' do
       VCR.use_cassette("user_created_hook") do
         fake_user = TestWhmcsMocks::User.new
+        fake_user.labels = {
+          'cpanel' => {
+            'mycpanelserver.net' => 'jane.doe3-10@demo.computestacks.net'
+          }
+        }
+        assert Whmcs::Hooks.method_defined? :user_created
+
+        hook = Whmcs::Hooks.new
+        assert hook.user_created(fake_user)
+      end
+    end
+
+    it 'can run user_created hook on a user without labels' do
+      VCR.use_cassette("user_created_hook") do
+        fake_user = TestWhmcsMocks::User.new
         assert Whmcs::Hooks.method_defined? :user_created
 
         hook = Whmcs::Hooks.new

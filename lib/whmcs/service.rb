@@ -60,6 +60,7 @@ module Whmcs
       # This method is passed the model from ComputeStacks, allowing us to save our own labels.
       #
       def link_user_by_username(model)
+        return true, [] if model.labels.empty? || model.labels['cpanel'].nil?
         candidates = []
         model.labels['cpanel'].each_key do |server|
           items = Whmcs::Service.find_all_by_username(model.labels['cpanel'][server])
