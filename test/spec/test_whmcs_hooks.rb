@@ -48,6 +48,28 @@ describe Whmcs::Hooks do
       end
     end
 
+    it 'can process update_user' do
+      VCR.use_cassette("user_update_hook") do
+        fake_user = TestWhmcsMocks::User.new
+        fake_user.email = 'fakeuseremail@demo.computestacks.net'
+        fake_user.labels = {
+          'whmcs' => {
+            'service_id' => 10
+          }
+        }
+        assert Whmcs::Hooks.method_defined? :user_updated
+        hook = Whmcs::Hooks.new
+        success = hook.user_updated fake_user
+        assert success
+        assert_empty hook.errors
+
+        # Now, put the original username back
+        check_service = Whmcs::Service.find(10)
+        check_service.username = "jane.doe3-10@demo.computestacks.net"
+        assert check_service.save
+      end
+    end
+
   end
 
 end

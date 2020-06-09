@@ -17,7 +17,7 @@ http_interactions:
       message: OK
     headers:
       set-cookie:
-      - WHMCSy551iLvnhYt7=1s8vqkft28o12fiqti83j9upb4; path=/; secure; HttpOnly, SERVERID=s73;
+      - WHMCSy551iLvnhYt7=08uih7o50gn3l1srqmaadmibkq; path=/; secure; HttpOnly, SERVERID=s73;
         path=/; HttpOnly
       expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
@@ -30,7 +30,7 @@ http_interactions:
       content-length:
       - '1062'
       date:
-      - Thu, 04 Jun 2020 18:31:58 GMT
+      - Tue, 09 Jun 2020 04:26:12 GMT
       server:
       - LiteSpeed
       strict-transport-security:
@@ -42,7 +42,7 @@ http_interactions:
         Demo","serverip":"","serverhostname":"demo.computestacks.net","suspensionreason":"","firstpaymentamount":"0.00","recurringamount":"0.00","paymentmethod":"mailin","paymentmethodname":"Mail
         In Payment","billingcycle":"Free Account","nextduedate":"0000-00-00","status":"Active","username":"jane.doe3-10@demo.computestacks.net","password":"KG24hus7M1z;]M","subscriptionid":"","promoid":0,"overideautosuspend":0,"overidesuspenduntil":"0000-00-00","ns1":"","ns2":"","assignedips":"","notes":"","diskusage":0,"disklimit":0,"bwusage":0,"bwlimit":0,"lastupdate":"0000-00-00
         00:00:00","customfields":{"customfield":[]},"configoptions":{"configoption":[]}}]}}'
-  recorded_at: Thu, 04 Jun 2020 18:31:58 GMT
+  recorded_at: Tue, 09 Jun 2020 04:26:12 GMT
 - request:
     method: post
     uri: https://<WHMCS_ENDPOINT>/includes/api.php
@@ -60,7 +60,7 @@ http_interactions:
       message: OK
     headers:
       set-cookie:
-      - WHMCSy551iLvnhYt7=aqncr53n4f9vlqfhii3bikaohv; path=/; secure; HttpOnly, SERVERID=s73;
+      - WHMCSy551iLvnhYt7=71jmfb8eh76gpe0eu31ldd24pn; path=/; secure; HttpOnly, SERVERID=s73;
         path=/; HttpOnly
       expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
@@ -73,7 +73,7 @@ http_interactions:
       content-length:
       - '580'
       date:
-      - Thu, 04 Jun 2020 18:31:59 GMT
+      - Tue, 09 Jun 2020 04:26:13 GMT
       server:
       - LiteSpeed
       strict-transport-security:
@@ -83,7 +83,7 @@ http_interactions:
       string: '{"result":"success","totalresults":1,"products":{"product":[{"pid":2,"gid":1,"type":"other","name":"ComputeStacks
         Account","description":"Create your ComputeStacks cloud account","module":"computestacks","paytype":"free","pricing":{"USD":{"prefix":"$","suffix":"
         USD","msetupfee":"0.00","qsetupfee":"0.00","ssetupfee":"0.00","asetupfee":"0.00","bsetupfee":"0.00","tsetupfee":"0.00","monthly":"-1.00","quarterly":"-1.00","semiannually":"-1.00","annually":"-1.00","biennially":"-1.00","triennially":"-1.00"}},"customfields":{"customfield":[]},"configoptions":{"configoption":[]}}]}}'
-  recorded_at: Thu, 04 Jun 2020 18:31:59 GMT
+  recorded_at: Tue, 09 Jun 2020 04:26:13 GMT
 - request:
     method: post
     uri: https://<WHMCS_ENDPOINT>/includes/api.php
@@ -101,7 +101,7 @@ http_interactions:
       message: OK
     headers:
       set-cookie:
-      - WHMCSy551iLvnhYt7=kr0927dakjcq3igij8mjhjl3oh; path=/; secure; HttpOnly, SERVERID=s73;
+      - WHMCSy551iLvnhYt7=5a8gsdhhacr2ak9efm84ebuqiv; path=/; secure; HttpOnly, SERVERID=s73;
         path=/; HttpOnly
       expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
@@ -114,7 +114,7 @@ http_interactions:
       content-length:
       - '2404'
       date:
-      - Thu, 04 Jun 2020 18:32:00 GMT
+      - Tue, 09 Jun 2020 04:26:13 GMT
       server:
       - LiteSpeed
       strict-transport-security:
@@ -130,5 +130,5 @@ http_interactions:
         Ave","address2":"","city":"Portland","fullstate":"Oregon","state":"Oregon","postcode":"97208","countrycode":"US","country":"US","phonenumber":"5035551212","tax_id":"","password":"$2y$10$rC6d1RDASaUciFDT5YAj5ufNcoIihkbEN1jobpj2X8FBCPI/rzQqq","email_preferences":{"general":1,"invoice":1,"support":1,"product":1,"domain":1,"affiliate":1},"statecode":"OR","countryname":"United
         States","phonecc":"1","phonenumberformatted":"+1.5035551212","telephoneNumber":"+1.5035551212","billingcid":0,"notes":"","twofaenabled":false,"currency":1,"defaultgateway":"","securityqid":0,"securityqans":"","groupid":0,"status":"Active","credit":"0.00","taxexempt":false,"latefeeoveride":false,"overideduenotices":false,"separateinvoices":false,"disableautocc":false,"emailoptout":true,"marketing_emails_opt_in":false,"overrideautoclose":false,"allowSingleSignOn":1,"email_verified":false,"language":"","isOptedInToMarketingEmails":false,"lastlogin":"No
         Login Logged","currency_code":"USD"}}'
-  recorded_at: Thu, 04 Jun 2020 18:32:00 GMT
+  recorded_at: Tue, 09 Jun 2020 04:26:13 GMT
 recorded_with: VCR 6.0.0

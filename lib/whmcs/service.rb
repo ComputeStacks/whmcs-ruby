@@ -5,10 +5,48 @@ module Whmcs
                   :client_id,
                   :product_id,
                   :username,
-                  :module,
-                  :status
+                  :status,
+                  :p_module,
+                  :errors
+
+    def initialize(args = {})
+      self.errors = []
+      super
+    end
+
+    # Set service username
+    def save
+      return false unless valid?
+      response = remote('UpdateClientProduct', { 'serviceid' => id, 'serviceusername' => username })
+      begin
+        result = Oj.load(response.body, { symbol_keys: true, mode: :object })
+        self.errors << result[:message] unless result[:result] == 'success'
+      rescue
+        # probably a failure anyways
+        self.errors << "Fatal error reporting usage to WHMCS."
+      end
+      errors.empty?
+    end
 
     class << self
+
+      ##
+      # Load service
+      def find(id)
+        response = Whmcs::Base.new.remote('GetClientsProducts', { 'serviceid' => id })
+        return nil unless response.success?
+        result = Oj.load(response.body, { symbol_keys: true, mode: :object })
+        return nil unless result[:totalresults].to_i == 1
+        service = result[:products][:product][0]
+        new(
+          id: service[:id],
+          client_id: service[:clientid],
+          product_id: service[:pid],
+          username: service[:username],
+          p_module: product_module(service[:pid]),
+          status: service[:status].downcase
+        )
+      end
 
       ##
       # Find a user given their product/service username
@@ -29,7 +67,7 @@ module Whmcs
               client_id: i[:clientid],
               status: i[:status],
               username: i[:username],
-              module: Whmcs::Service.product_module(i[:pid])
+              p_module: Whmcs::Service.product_module(i[:pid])
             )
           end
 
@@ -68,7 +106,7 @@ module Whmcs
             candidates << {
               client_id: i.client_id,
               service_id: i.id,
-              module: i.module
+              p_module: i.p_module
             } unless candidates.map { |i| i[:client_id] }.include?(i.client_id)
           end
         end
@@ -88,7 +126,7 @@ module Whmcs
         labels.merge!(
           'whmcs' => {
             'client_id' => candidate[:client_id],
-            'service_id' => candidate[:module] == 'computestacks' ? candidate[:service_id] : nil
+            'service_id' => candidate[:p_module] == 'computestacks' ? candidate[:service_id] : nil
           }
         )
 
@@ -117,5 +155,13 @@ module Whmcs
         return true, []
       end
     end
+
+    private
+
+    def valid?
+      self.errors << "Missing service id" if self.id.blank?
+      errors.empty?
+    end
+
   end
 end

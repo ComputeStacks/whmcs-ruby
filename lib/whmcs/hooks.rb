@@ -4,7 +4,7 @@ module Whmcs
   #
   # Available Hooks:
   #
-  # user_created:
+  # user_created, user_updated:
   # * params: User model. This allows you to access the user object and make changes to the user
   #
   # process_usage:
@@ -40,6 +40,25 @@ module Whmcs
       return true if usage.billable_items.empty?
       result = usage.save
       self.errors += usage.errors
+      errors.empty? && result
+    end
+
+    ##
+    # User Updated
+    #
+    # Update the username field of a WHMCS service
+    #
+    def user_updated(model)
+      return true if model.labels.empty? || model.labels.dig('whmcs', 'service_id').nil?
+      service = Whmcs::Service.find(model.labels['whmcs']['service_id'].to_i)
+      if service.nil?
+        self.errors << "Unknown service, unable to update."
+        return false
+      end
+      return true if model.email == service.username
+      service.username = model.email
+      result = service.save
+      self.errors += service.errors
       errors.empty? && result
     end
 

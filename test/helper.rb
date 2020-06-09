@@ -6,6 +6,7 @@ require 'mocks/test_whmcs_mocks'
 require 'minitest/autorun'
 require "minitest/reporters"
 require 'vcr'
+require 'yaml'
 
 require 'whmcs'
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new

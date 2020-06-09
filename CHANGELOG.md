@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.0.0 (June 4, 2020)
+## v2.0.0 (June 8, 2020)
 
 **NOTE: Major breaking changes in v2! You must be using ComputeStacks v6+ or greater to make use of these changes.**
 

@@ -38,7 +38,7 @@ module Whmcs
           self.errors << "Fatal error reporting usage to WHMCS."
         end
       end
-      return errors.empty?
+      errors.empty?
     end
 
     private

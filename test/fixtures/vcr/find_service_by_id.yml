@@ -5,7 +5,7 @@ http_interactions:
     uri: https://<WHMCS_ENDPOINT>/includes/api.php
     body:
       encoding: UTF-8
-      string: action=GetClientsProducts&identifier=<WHMCS_API_KEY>&limitstart=0&responsetype=json&secret=<WHMCS_API_SECRET>&username2=jane.doe3-10%40demo.computestacks.net
+      string: action=GetClientsProducts&identifier=<WHMCS_API_KEY>&responsetype=json&secret=<WHMCS_API_SECRET>&serviceid=10
     headers:
       User-Agent:
       - Faraday v1.0.1
@@ -17,7 +17,7 @@ http_interactions:
       message: OK
     headers:
       set-cookie:
-      - WHMCSy551iLvnhYt7=oqfgqesft9iubn9hgglkcbk2rk; path=/; secure; HttpOnly, SERVERID=s73;
+      - WHMCSy551iLvnhYt7=ip0uekrt9lst2tilu2qmscf6oe; path=/; secure; HttpOnly, SERVERID=s73;
         path=/; HttpOnly
       expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
@@ -37,7 +37,7 @@ http_interactions:
       - max-age=16000000; includeSubDomains; preload;
     body:
       encoding: UTF-8
-      string: '{"result":"success","clientid":null,"serviceid":null,"pid":null,"domain":null,"totalresults":1,"startnumber":0,"numreturned":1,"products":{"product":[{"id":10,"clientid":3,"orderid":8,"pid":2,"regdate":"2020-06-04","name":"ComputeStacks
+      string: '{"result":"success","clientid":null,"serviceid":"10","pid":null,"domain":null,"totalresults":1,"startnumber":0,"numreturned":1,"products":{"product":[{"id":10,"clientid":3,"orderid":8,"pid":2,"regdate":"2020-06-04","name":"ComputeStacks
         Account","translated_name":"ComputeStacks Account","groupname":"ComputeStacks","translated_groupname":"ComputeStacks","domain":"","dedicatedip":"","serverid":1,"servername":"CS
         Demo","serverip":"","serverhostname":"demo.computestacks.net","suspensionreason":"","firstpaymentamount":"0.00","recurringamount":"0.00","paymentmethod":"mailin","paymentmethodname":"Mail
         In Payment","billingcycle":"Free Account","nextduedate":"0000-00-00","status":"Active","username":"jane.doe3-10@demo.computestacks.net","password":"KG24hus7M1z;]M","subscriptionid":"","promoid":0,"overideautosuspend":0,"overidesuspenduntil":"0000-00-00","ns1":"","ns2":"","assignedips":"","notes":"","diskusage":0,"disklimit":0,"bwusage":0,"bwlimit":0,"lastupdate":"0000-00-00
@@ -60,7 +60,7 @@ http_interactions:
       message: OK
     headers:
       set-cookie:
-      - WHMCSy551iLvnhYt7=m2r78lhgrsj18in6uskuk4dev2; path=/; secure; HttpOnly, SERVERID=s73;
+      - WHMCSy551iLvnhYt7=ljksa853gpb9a3lqseejckfncc; path=/; secure; HttpOnly, SERVERID=s73;
         path=/; HttpOnly
       expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
@@ -73,7 +73,7 @@ http_interactions:
       content-length:
       - '580'
       date:
-      - Tue, 09 Jun 2020 04:26:17 GMT
+      - Tue, 09 Jun 2020 04:26:16 GMT
       server:
       - LiteSpeed
       strict-transport-security:
@@ -83,5 +83,5 @@ http_interactions:
       string: '{"result":"success","totalresults":1,"products":{"product":[{"pid":2,"gid":1,"type":"other","name":"ComputeStacks
         Account","description":"Create your ComputeStacks cloud account","module":"computestacks","paytype":"free","pricing":{"USD":{"prefix":"$","suffix":"
         USD","msetupfee":"0.00","qsetupfee":"0.00","ssetupfee":"0.00","asetupfee":"0.00","bsetupfee":"0.00","tsetupfee":"0.00","monthly":"-1.00","quarterly":"-1.00","semiannually":"-1.00","annually":"-1.00","biennially":"-1.00","triennially":"-1.00"}},"customfields":{"customfield":[]},"configoptions":{"configoption":[]}}]}}'
-  recorded_at: Tue, 09 Jun 2020 04:26:17 GMT
+  recorded_at: Tue, 09 Jun 2020 04:26:16 GMT
 recorded_with: VCR 6.0.0

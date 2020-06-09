@@ -9,6 +9,7 @@ When generating API Credentials, here are a list of all the required actions:
 * `Client -> GetClientsDetails`
 * `Client -> GetClientsProducts`
 * `Products -> GetProducts`
+* `Products -> UpdateClientProduct`
 * `Servers -> GetHealthStatus`
 
 ## Development
