@@ -1,5 +1,13 @@
 # WHMCS Billing Plugin for ComputeStacks
 
+## Overview
+
+* `User.external_id` = `serviceid` in WHMCS
+* Uses the following labels:
+    * `{ 'whmcs' => { 'client_id' => '', 'service_id' => '' } }`
+* 1 account in CS = 1 account in WHMCS
+* When enabling, it will automatically disable user registration. However, you can manually re-enable that.
+
 ## WHMCS API Credentials
 
 When generating API Credentials, here are a list of all the required actions:
