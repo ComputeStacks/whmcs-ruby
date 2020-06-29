@@ -111,6 +111,10 @@ module Whmcs
           end
         end
 
+        if candidates.empty?
+          return false, ["No candidates found"]
+        end
+
         if candidates.count > 1
           return false, ["Multiple candidates found (found: #{candidates.count}"]
         end
