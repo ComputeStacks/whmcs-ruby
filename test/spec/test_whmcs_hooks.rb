@@ -8,7 +8,9 @@ describe Whmcs::Hooks do
       Whmcs.configure(
         endpoint: ENV['WHMCS_ENDPOINT'],
         api_key: ENV['WHMCS_API_KEY'],
-        api_secret: ENV['WHMCS_API_SECRET']
+        api_secret: ENV['WHMCS_API_SECRET'],
+        due_date: '15',
+        invoice_on: 'nextcron'
       )
     end
 

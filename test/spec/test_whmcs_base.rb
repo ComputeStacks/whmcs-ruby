@@ -8,7 +8,8 @@ describe Whmcs::Base do
       Whmcs.configure(
         endpoint: '',
         api_key: '',
-        api_secret: ''
+        api_secret: '',
+        due_date: '1'
       )
     end
 

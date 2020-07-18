@@ -16,7 +16,7 @@ module Whmcs
     # Create billable items in WHMCS
     def save
       t = Time.new(Time.now.utc.year,Time.now.utc.month)+45*24*3600
-      due_date = Time.new(t.year, t.month, 1).strftime('%Y-%m-%d')
+      due_date = Time.new(t.year, t.month, due_date_day).strftime('%Y-%m-%d')
       # Generate Billable Items
       billable_items.each do |i|
         # Data format sent to WHMCS.
@@ -24,7 +24,7 @@ module Whmcs
           'clientid' => i[:client_id],
           'description' => i[:product],
           'amount' => i[:total],
-          'invoiceaction' => 'duedate',
+          'invoiceaction' => invoice_generate_on,
           'duedate' => due_date,
           'hours' => i[:qty]
         }
@@ -42,6 +42,17 @@ module Whmcs
     end
 
     private
+
+    def due_date_day
+      default_due_date = Whmcs.settings.select{ |i| i[:name] == 'due_date' }[0][:default].to_i
+      default_due_date = default_due_date.zero? ? 1 : default_due_date
+      Whmcs.config[:due_date].to_i.zero? ? default_due_date : Whmcs.config[:due_date].to_i
+    end
+
+    def invoice_generate_on
+      generate_on_default = Whmcs.settings.select{ |i| i[:name] == 'invoice_on' }[0][:default]
+      %w(duedate nextcron).include?(Whmcs.config[:invoice_on]) ? Whmcs.config[:invoice_on] : generate_on_default
+    end
 
     ##
     # Format data provided by ComputeStacks, for WHMCS

@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.0 (July 18, 2020)
+
+* [FEATURE] You may now specify what day of the month the invoice will be due, and when to generate the invoice. Billable items are created on the last day of the month, so you may now choose to have the invoice generated on the due date (default), or immediately on the next cron run. By choosing next cron run, you may set the due date later in the month to allow your customers a certain number of days before the invoice is due.
+
+***
+
 ## v2.0.0 (June 8, 2020)
 
 **NOTE: Major breaking changes in v2! You must be using ComputeStacks v6+ or greater to make use of these changes.**

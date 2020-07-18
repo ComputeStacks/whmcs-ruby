@@ -26,7 +26,7 @@ module Whmcs
     def user_created(model)
       success, errors = Whmcs::Service.link_user_by_username model
       return true if success
-      self.errors =+ errors
+      self.errors += errors
       false
     end
 

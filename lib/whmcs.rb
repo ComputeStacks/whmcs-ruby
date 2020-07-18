@@ -36,25 +36,43 @@ module Whmcs
       name: 'endpoint',
       label: 'WHMCS URL',
       description: 'example: whmcs.mysite.com',
-      field_type: 'string'
+      field_type: 'string',
+      default: ''
     },
     {
       name: 'api_key',
       label: 'API Key',
       description: '',
-      field_type: 'string'
+      field_type: 'string',
+      default: ''
     },
     {
       name: 'api_secret',
       label: 'API Secret',
       description: '',
-      field_type: 'password'
+      field_type: 'password',
+      default: ''
     },
     {
       name: 'access_key',
       label: 'API Access Key',
       description: '(optional) access key to bypass WHMCS api IP restrictions',
-      field_type: 'password'
+      field_type: 'password',
+      default: ''
+    },
+    {
+      name: 'due_date',
+      label: 'Invoice Due Day of Month',
+      description: 'What day of the month should the invocie be due? All invoices are generated on the 1st of the month.',
+      field_type: 'string',
+      default: '1'
+    },
+    {
+      name: 'invoice_on',
+      label: 'When to generate invoices',
+      description: 'By default, we will invoice on the due date. Alternatively, you can set this to nextcron.',
+      field_type: 'string',
+      default: 'duedate'
     }
   ]
 
