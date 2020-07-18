@@ -11,7 +11,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/ComputeStacks/whmcs-ruby"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
-  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/ComputeStacks"
+  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com"
+  spec.metadata['github_repo'] = "ssh://github.com/ComputeStacks/whmcs-ruby.git"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
