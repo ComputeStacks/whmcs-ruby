@@ -61,13 +61,8 @@ module Whmcs
       user_ids = []
       data.each do |i|
         clientid = i.dig(:user, :labels, 'whmcs', 'client_id')
-        if clientid.blank?
-          # check for legacy external_id
-          clientid = i.dig(:user, :external_id)
-          next if clientid.blank?
-          # if we have a valid ID and service_id does not exist, then this is a legacy client id, so we can use that.
-          next unless i.dig(:user, :labels, 'whmcs', 'service_id').blank?
-        end
+        clientid = i.dig(:user, :external_id) if clientid.blank?
+        next if clientid.blank?
         clientid = clientid.to_i # ensure we always have an int
         user_ids << clientid unless user_ids.include?(clientid)
         # Now set our copy of the data to include the clientid as the external id. We will use this later to verify the output

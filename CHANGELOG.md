@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.2.1 (Mar 1, 2021)
+
+* [FIX] Link legacy whmcs users.
+
+***
+
 ## v2.2.0 (Dec 9, 2020)
 
 * [CHANGE] Bump ActiveSupport to v6.1.
