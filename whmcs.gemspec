@@ -29,7 +29,6 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'activesupport', '>= 6.1'
   spec.add_runtime_dependency 'faraday', '~> 1'
-  spec.add_runtime_dependency 'oj', '~> 3.0'
 
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'minitest', '~> 5'

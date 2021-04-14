@@ -1,7 +1,6 @@
 require "active_support"
 require "active_support/core_ext/object/blank"
 require "faraday"
-require 'oj'
 
 require "whmcs/base"
 require "whmcs/hooks"
@@ -10,6 +9,10 @@ require "whmcs/usage"
 require "whmcs/user"
 require "whmcs/version"
 
+if RUBY_ENGINE == 'ruby' and not ENV['DISABLE_OJ']
+  require 'oj'
+  Oj.mimic_JSON
+end
 
 module Whmcs
   class Error < StandardError; end
