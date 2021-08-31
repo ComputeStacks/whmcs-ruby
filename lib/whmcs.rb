@@ -105,6 +105,18 @@ module Whmcs
       Whmcs::Base.new.remote('GetHealthStatus').success?
     end
 
+    ##
+    # Load WHMCS version
+    #
+    # `{"result"=>"success", "whmcs"=>{"version"=>"8.2.0", "canonicalversion"=>"8.2.0-release.1"}}`
+    #
+    # @return Gem::Version
+    def whmcs_version
+      Gem::Version.new Oj.load(Whmcs::Base.new.remote('WhmcsDetails').body)['whmcs']['version']
+    rescue
+      Gem::Version.new '0.0'
+    end
+
   end
 
 end

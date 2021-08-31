@@ -19,17 +19,8 @@ module Whmcs
       due_date = Time.new(t.year, t.month, due_date_day).strftime('%Y-%m-%d')
       # Generate Billable Items
       billable_items.each do |i|
-        # Data format sent to WHMCS.
-        data = {
-          'clientid' => i[:client_id],
-          'description' => i[:product],
-          'amount' => i[:total],
-          'invoiceaction' => invoice_generate_on,
-          'duedate' => due_date,
-          'hours' => i[:qty]
-        }
         # Intentionally not including this so we can capture the exception in CS.
-        response = remote('AddBillableItem', data)
+        response = remote('AddBillableItem', billabe_by_version(i))
         begin
           result = Oj.load(response.body, { symbol_keys: true, mode: :object })
           self.errors << result[:message] unless result[:result] == 'success'
@@ -42,6 +33,29 @@ module Whmcs
     end
 
     private
+
+    def billabe_by_version(i)
+      if Whmcs.whmcs_version > Gem::Version.new('8.1.0')
+        {
+          'clientid' => i[:client_id],
+          'description' => i[:product],
+          'amount' => i[:total],
+          'invoiceaction' => invoice_generate_on,
+          'duedate' => due_date,
+          'quantity' => i[:qty],
+          'unit' => 'quantity'
+        }
+      else
+        {
+          'clientid' => i[:client_id],
+          'description' => i[:product],
+          'amount' => i[:total],
+          'invoiceaction' => invoice_generate_on,
+          'duedate' => due_date,
+          'hours' => i[:qty]
+        }
+      end
+    end
 
     def due_date_day
       default_due_date = Whmcs.settings.select{ |i| i[:name] == 'due_date' }[0][:default].to_i

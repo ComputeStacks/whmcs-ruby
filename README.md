@@ -19,6 +19,7 @@ When generating API Credentials, here are a list of all the required actions:
 * `Products -> GetProducts`
 * `Products -> UpdateClientProduct`
 * `Servers -> GetHealthStatus`
+* `Servers -> WhmcsDetails`
 
 ## Development
 

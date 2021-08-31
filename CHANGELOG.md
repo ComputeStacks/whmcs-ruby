@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.0 (Aug 31, 2021)
+
+* [CHANGE] Update usage to support WHMCS 8.2.
+
 ## v2.2.1 (Mar 1, 2021)
 
 * [FIX] Link legacy whmcs users.
