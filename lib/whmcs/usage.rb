@@ -35,7 +35,7 @@ module Whmcs
     private
 
     def billabe_by_version(i, due_date)
-      if Whmcs.whmcs_version > Gem::Version.new('8.1.0')
+      if Whmcs.whmcs_version >= Gem::Version.new('8.2.0')
         {
           'clientid' => i[:client_id],
           'description' => i[:product],
