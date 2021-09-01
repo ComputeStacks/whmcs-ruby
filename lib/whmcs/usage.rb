@@ -20,7 +20,7 @@ module Whmcs
       # Generate Billable Items
       billable_items.each do |i|
         # Intentionally not including this so we can capture the exception in CS.
-        response = remote('AddBillableItem', billabe_by_version(i))
+        response = remote('AddBillableItem', billabe_by_version(i, due_date))
         begin
           result = Oj.load(response.body, { symbol_keys: true, mode: :object })
           self.errors << result[:message] unless result[:result] == 'success'
@@ -34,7 +34,7 @@ module Whmcs
 
     private
 
-    def billabe_by_version(i)
+    def billabe_by_version(i, due_date)
       if Whmcs.whmcs_version > Gem::Version.new('8.1.0')
         {
           'clientid' => i[:client_id],
