@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.3.2 (Aug 31, 2021)
+## v2.3.3 (Aug 31, 2021)
 
 * [CHANGE] Update usage to support WHMCS 8.2.
 

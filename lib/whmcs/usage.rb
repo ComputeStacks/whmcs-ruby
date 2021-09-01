@@ -74,11 +74,18 @@ module Whmcs
       # Collect all WHMCS users IDs
       user_ids = []
       data.each do |i|
-        clientid = i.dig(:user, :labels, 'whmcs', 'client_id')
-        if clientid.blank? && i.dig(:user, :labels, 'whmcs', 'service_id')
-          s = Whmcs::Service.find(i.dig(:user, :labels, 'whmcs', 'service_id'))
-          client_id = s.client_id if s
-        end
+        # clientid = i.dig(:user, :labels, 'whmcs', 'client_id')
+        # if clientid.blank? && i.dig(:user, :labels, 'whmcs', 'service_id')
+        #   s = Whmcs::Service.find(i.dig(:user, :labels, 'whmcs', 'service_id'))
+        #   client_id = s.client_id if s
+        # end
+        whmcs_cid = i.dig(:user, :labels, 'whmcs', 'client_id')
+        whmcs_sid = i.dig(:user, :labels, 'whmcs', 'service_id')
+        clientid = if whmcs_cid.blank?
+                     whmcs_sid.blank? ? nil : Whmcs::Service.find(i.dig(:user, :labels, 'whmcs', 'service_id'))&.client_id
+                   else
+                     i.dig(:user, :labels, 'whmcs', 'client_id')
+                   end
         clientid = i.dig(:user, :external_id) if clientid.blank?
         next if clientid.blank?
         clientid = clientid.to_i # ensure we always have an int
