@@ -9,6 +9,7 @@ describe Whmcs::Base do
         endpoint: '',
         api_key: '',
         api_secret: '',
+        access_key: '',
         due_date: '1'
       )
     end

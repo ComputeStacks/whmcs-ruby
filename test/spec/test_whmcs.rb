@@ -9,6 +9,7 @@ describe Whmcs do
         endpoint: ENV['WHMCS_ENDPOINT'],
         api_key: ENV['WHMCS_API_KEY'],
         api_secret: ENV['WHMCS_API_SECRET'],
+        access_key: ENV['WHMCS_API_ACCESS_KEY'],
         invalid_key: 'nope',
         due_date: '1'
       )
@@ -23,9 +24,9 @@ describe Whmcs do
     end
 
     it "can test it's connection" do
-      VCR.use_cassette "get_health_status" do
-        assert Whmcs.test_connection!
-      end
+      d = Whmcs.test_connection! true
+      puts d[:message] unless d[:success]
+      assert d[:success]
     end
 
   end

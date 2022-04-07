@@ -100,9 +100,21 @@ module Whmcs
     # Test the connection to the integration
     #
     # Should return boolean (true|false)
+    # if you pass `true`, you'll get a hash: {success:bool, message:hash or string}
     #
-    def test_connection!
-      Whmcs::Base.new.remote('GetHealthStatus').success?
+    def test_connection!(include_message = false)
+      response = Whmcs::Base.new.remote('GetHealthStatus')
+      return response.success? unless include_message
+      d = Oj.load response.body
+      {
+        success: response.success?,
+        message: d
+      }
+    rescue
+      {
+        success: response.success?,
+        message: response.body
+      }
     end
 
     ##

@@ -36,6 +36,23 @@ Using _direnv_, you can:
 * `mv envrc.sample .envrc` and adjust accordingly
 * run `direnv allow .`
 
-### Sensitive Data
+### Running Tests
 
-Before committing new `vcr` fixtures, please scrub any personal information from them.
+`bundle exec rake test`
+
+#### WHMCS Test Setup
+
+1. Create cpanel server with hostname: `mycpanelserver.net` -- doesn't have to actually exist.
+
+2. Create server group and assign server
+
+3. Create product assigned to previously created server group (under modules)
+
+4. Create user with email jane.doe@example.com. Record `userid` as `WHMCS_TEST_USER_ID`.
+
+5. Add new order for user (skip invoice, emails, etc) and accept order. Set username to `jane.doe3-10@demo.computestacks.net`.
+
+6. Record `serviceid` in your `.env` file for `WHMCS_TEST_SERVICE_ID`.
+
+_Be sure to delete the billable items after you run the tests. There is no WHMCS api to do that automatically._
+

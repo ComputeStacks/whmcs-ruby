@@ -9,67 +9,61 @@ describe Whmcs::Hooks do
         endpoint: ENV['WHMCS_ENDPOINT'],
         api_key: ENV['WHMCS_API_KEY'],
         api_secret: ENV['WHMCS_API_SECRET'],
+        access_key: ENV['WHMCS_API_ACCESS_KEY'],
         due_date: '15',
         invoice_on: 'nextcron'
       )
     end
 
     it 'can run user_created hook' do
-      VCR.use_cassette("user_created_hook") do
-        fake_user = TestWhmcsMocks::User.new
-        fake_user.labels = {
-          'cpanel' => {
-            'mycpanelserver.net' => 'jane.doe3-10@demo.computestacks.net'
-          }
+      fake_user = TestWhmcsMocks::User.new
+      fake_user.labels = {
+        'cpanel' => {
+          'mycpanelserver.net' => 'jane.doe3-10@demo.computestacks.net'
         }
-        assert Whmcs::Hooks.method_defined? :user_created
+      }
+      assert Whmcs::Hooks.method_defined? :user_created
 
-        hook = Whmcs::Hooks.new
-        assert hook.user_created(fake_user)
-      end
+      hook = Whmcs::Hooks.new
+      assert hook.user_created(fake_user)
     end
 
     it 'can run user_created hook on a user without labels' do
-      VCR.use_cassette("user_created_hook") do
-        fake_user = TestWhmcsMocks::User.new
-        assert Whmcs::Hooks.method_defined? :user_created
+      fake_user = TestWhmcsMocks::User.new
+      assert Whmcs::Hooks.method_defined? :user_created
 
-        hook = Whmcs::Hooks.new
-        assert hook.user_created(fake_user)
-      end
+      hook = Whmcs::Hooks.new
+      assert hook.user_created(fake_user)
     end
 
     it 'can process aggregated usage' do
-      data = YAML.load File.open('test/fixtures/aggregated_usage.yml').read
+      aggr_file = ERB.new File.open('test/fixtures/aggregated_usage.yml.erb').read
+      data = YAML.load aggr_file.result binding
       assert Whmcs::Hooks.method_defined? :process_usage
-      VCR.use_cassette("create_billable_items") do
-        hook = Whmcs::Hooks.new
-        success = hook.process_usage(data)
-        assert success
-        assert_empty hook.errors
-      end
+      hook = Whmcs::Hooks.new
+      success = hook.process_usage(data)
+      assert success
+      assert_empty hook.errors
     end
 
     it 'can process update_user' do
-      VCR.use_cassette("user_update_hook") do
-        fake_user = TestWhmcsMocks::User.new
-        fake_user.email = 'fakeuseremail@demo.computestacks.net'
-        fake_user.labels = {
-          'whmcs' => {
-            'service_id' => 10
-          }
+      fake_user = TestWhmcsMocks::User.new
+      fake_user.email = 'fakeuseremail@demo.computestacks.net'
+      fake_user.labels = {
+        'whmcs' => {
+          'service_id' => ENV['WHMCS_TEST_SERVICE_ID']
         }
-        assert Whmcs::Hooks.method_defined? :user_updated
-        hook = Whmcs::Hooks.new
-        success = hook.user_updated fake_user
-        assert success
-        assert_empty hook.errors
+      }
+      assert Whmcs::Hooks.method_defined? :user_updated
+      hook = Whmcs::Hooks.new
+      success = hook.user_updated fake_user
+      assert success
+      assert_empty hook.errors
 
-        # Now, put the original username back
-        check_service = Whmcs::Service.find(10)
-        check_service.username = "jane.doe3-10@demo.computestacks.net"
-        assert check_service.save
-      end
+      # Now, put the original username back
+      check_service = Whmcs::Service.find ENV['WHMCS_TEST_SERVICE_ID']
+      check_service.username = "jane.doe3-10@demo.computestacks.net"
+      assert check_service.save
     end
 
   end

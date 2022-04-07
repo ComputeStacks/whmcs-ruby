@@ -2,5 +2,5 @@ source "https://rubygems.org"
 
 gemspec
 
-gem "rake", "~> 12.0"
-gem 'oj', '= 3.11.3', platform: :ruby
+gem "rake", "~> 13"
+gem 'oj', '~> 3', platform: :ruby

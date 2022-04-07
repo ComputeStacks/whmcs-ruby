@@ -1,3 +1,6 @@
 export WHMCS_ENDPOINT=whmcs.website.com
 export WHMCS_API_KEY=whmcs-api-key
 export WHMCS_API_SECRET=whmcs-api-secret
+export WHMCS_API_ACCESS_KEY=whmcs-access-key
+export WHMCS_TEST_SERVICE_ID=
+export WHMCS_TEST_USER_ID=
