@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    whmcs (2.3.6)
+    whmcs (2.3.7)
       activesupport (>= 6.1)
       faraday (< 3)
 
