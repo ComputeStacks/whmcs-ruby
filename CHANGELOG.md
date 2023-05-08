@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.5 (May 8, 2023)
+
+* [CHANGE] Bump dependency versions.
+
 ## v2.3.4 (Aug 31, 2021)
 
 * [CHANGE] Update usage to support WHMCS 8.2.

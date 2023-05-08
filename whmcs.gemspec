@@ -29,9 +29,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'activesupport', '>= 6.1'
-  spec.add_runtime_dependency 'faraday', '~> 1'
+  spec.add_runtime_dependency 'faraday', '< 3'
 
   spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'minitest', '~> 5'
-  spec.add_development_dependency 'minitest-reporters', '> 1'
+  spec.add_development_dependency 'minitest'
+  spec.add_development_dependency 'minitest-reporters'
 end
